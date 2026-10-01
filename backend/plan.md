@@ -2,6 +2,10 @@ create issue
 read issue
 update issue
 delete issue
+authentication
+authoorization
+sso
+rate limiting
 
 LocalBoard is a barebones, real-time issue tracker built entirely without frameworks. By stripping away React, Express, and MongoDB, you are forced to manually handle the exact mechanical problems those frameworks usually hide from you.
 
