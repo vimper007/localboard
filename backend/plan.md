@@ -153,4 +153,15 @@ Before moving to Phase 2 (State Management & Closures), the following must be tr
 4. I can change an issue from "Open" to "In Progress", refresh the page, and it remains "In Progress".
 5. I can click "Delete", the issue disappears from the DOM, and checking the raw `issues.json` file confirms the object is gone.
 
+
+
+HTTP Method	Route	Recommended Handler Name	What it does
+GET	/api/v1/issues	getAllIssues or getIssuesHandler	Fetches the full list of issues
+POST	/api/v1/issues	createIssue or createIssueHandler	Creates and saves a new issue
+GET	/api/v1/issues/:id	getIssueById or getSingleIssueHandler	Finds one issue matching the UUID
+PUT / PATCH	/api/v1/issues/:id	updateIssue or updateIssueHandler	Edits an existing issue
+DELETE	/api/v1/issues/:id	deleteIssue or deleteIssueHandler	Removes an issue by UUID
+
 ---
+
+
