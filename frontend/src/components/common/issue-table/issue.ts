@@ -1,0 +1,61 @@
+import type { Issue } from "@/types/issue";
+
+export const issue: Issue[] = [
+  {
+    id: 'fgdgfdg',
+    title: "issue 1",
+    description: "description",
+    status: "in-progress",
+    createdAt: ""
+  },
+  {
+    id: 'fdgffdgfdg',
+    title: "issue 1",
+    description: "description",
+    status: "in-progress",
+    createdAt: ""
+  },
+  {
+    id: 'fdgfdgdfgdgdfgdfg',
+    title: "issue 1",
+    description: "description",
+    status: "in-progress",
+    createdAt: ""
+  },
+  {
+    id: '3424ewr',
+    title: "issue 1",
+    description: "description",
+    status: "in-progress",
+    createdAt: ""
+  },
+  {
+    id: "fcc2db02-a976-4598-af15-b93e1daf4fd2",
+    title: "issue 1",
+    description: "description",
+    status: "in-progress",
+    createdAt: "1791183741406"
+  },
+  {
+    id: "c84043e8-ca9d-4bc2-b0f6-991996d742e5",
+    title: "issue 1",
+    description: "description",
+    status: "in-progress",
+    createdAt: "1791183785521"
+  },
+  {
+    title: "issue 2",
+    description: "description 2",
+    status: "open",
+    createdAt: "1791198038260",
+    id: "06297349-510e-4ed5-87dc-b36438656a11"
+  },
+  {
+    title: "issue 3c",
+    description: "description 3c",
+    status: "in-progress",
+    createdAt: "1791201395005",
+    id: "e5581b75-e507-43c7-a69d-7cc85e508db5",
+    updatedAt: "1791303945717"
+  }
+]
