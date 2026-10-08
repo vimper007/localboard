@@ -6,6 +6,8 @@ import { createColumnHelper } from "@tanstack/react-table"
 import { type DataTableFeatures } from "./issue-table-features"
 import type { Issue } from "@/types/issue"
 import { Button } from "@/components/ui/button"
+import { capitaliseStatus } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
 
 
@@ -25,10 +27,10 @@ export const columns = columnHelper.columns([
         cell: (info) => {
             const status = info.row.original.status
             return (
-                <Button>{}</Button>
+                <Badge variant={status === 'done' ? 'default' : status === 'in-progress' ? 'outline' : 'destructive'}>{capitaliseStatus(status)}</Badge>
             )
         }
-        
+
     }),
     columnHelper.display({
         id: 'actions',
@@ -36,7 +38,7 @@ export const columns = columnHelper.columns([
         cell: (info) => {
             const currentIssue = info.row.original
             return (
-                <div className="flex gap-2" >
+                <div className="flex gap-2">
                     <Button variant="secondary" onClick={() => console.log(currentIssue)}>Edit</Button>
                     <Button variant="destructive" onClick={() => currentIssue}>Delete</Button>
                 </div>
