@@ -147,6 +147,23 @@ function readFile(req, res, next) {
   });
 }
 
+function cors(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, DELETE, OPTIONS",
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.methods === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  next();
+}
+
 function createIssueHandler(req, res) {
   logger(req, res, () => {
     parseBody(req, res, () => {
@@ -210,52 +227,58 @@ function updateIssueHandler(req, res) {
   });
 }
 
+function deleteIssueHandler(req, res) {
+  readFile(req, res, () => {
+    const id = req.url.split("/")[4];
+    const filteredIssues = req.issues.filter((issue) => issue?.id !== id);
+    if (!filteredIssues) {
+      res.writeHead(404, { "content-type": "application/json" });
+      res.end(
+        JSON.stringify({
+          error: "Record not found",
+          message: "Record with sent id is not found",
+        }),
+      );
+      return;
+    }
+    fs.writeFile(filePath, JSON.stringify(filteredIssues), (err) => {
+      if (err) {
+        res.writeHead(500, { "content-type": "text/plain" });
+        res.end("Server Error, Write file failure");
+      }
+    });
+    res.writeHead(204, { "content-type": "application/json" });
+    res.end();
+  });
+}
+
 console.log(PORT);
 const server = http.createServer((req, res) => {
-  const uuidRegex =
-    /^\/api\/v1\/issues\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  switch (true) {
-    case uuidRegex.test(req.url):
-      if (req.method === "GET") {
-        getIssueByIdHandler(req, res);
-      } else if (req.method === "PATCH") {
-        updateIssueHandler(req, res);
-      } else if (req.method === "DELETE") {
-        readFile(req, res, () => {
-          const id = req.url.split("/")[4];
-          const filteredIssues = req.issues.filter((issue) => issue?.id !== id);
-          if (!filteredIssues) {
-            res.writeHead(404, { "content-type": "application/json" });
-            res.end(
-              JSON.stringify({
-                error: "Record not found",
-                message: "Record with sent id is not found",
-              }),
-            );
-            return;
-          }
-          fs.writeFile(filePath, JSON.stringify(filteredIssues), (err) => {
-            if (err) {
-              res.writeHead(500, { "content-type": "text/plain" });
-              res.end("Server Error, Write file failure");
-            }
-          });
-          res.writeHead(204, { "content-type": "application/json" });
-          res.end();
-        });
-      }
-      break;
-    case req.url === "/api/v1/issues":
-      if (req.method === "GET") {
-        getIssuesHandler(req, res);
-      } else if (req.method === "POST") {
-        createIssueHandler(req, res);
-      }
-      break;
-    default:
-      res.statusCode = 404;
-      res.end("Not Found");
-  }
+  cors(req, res, () => {
+    const uuidRegex =
+      /^\/api\/v1\/issues\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    switch (true) {
+      case uuidRegex.test(req.url):
+        if (req.method === "GET") {
+          getIssueByIdHandler(req, res);
+        } else if (req.method === "PATCH") {
+          updateIssueHandler(req, res);
+        } else if (req.method === "DELETE") {
+          deleteIssueHandler(req, res);
+        }
+        break;
+      case req.url === "/api/v1/issues":
+        if (req.method === "GET") {
+          getIssuesHandler(req, res);
+        } else if (req.method === "POST") {
+          createIssueHandler(req, res);
+        }
+        break;
+      default:
+        res.statusCode = 404;
+        res.end("Not Found");
+    }
+  });
 });
 
 server.listen(PORT, () =>
