@@ -3,13 +3,10 @@ import { Button } from '../ui/button'
 import { Field, FieldGroup, FieldLabel, FieldSet } from '../ui/field'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
-import type { Issue } from '@/types/issue'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Textarea } from '../ui/textarea'
 
-type EditIssueDialogProps = {
-    issue: Issue
-}
+
 
 const items = [
     { label: "Open", value: "open" },
@@ -17,23 +14,22 @@ const items = [
     { label: "Done", value: "done" },
 ]
 
-const EditIssueDialog = ({ issue }: EditIssueDialogProps) => {
+const CreateIssueDialog = () => {
     return (
         <Dialog>
-            <DialogTrigger render={<Button variant="outline">Edit</Button>} />
+            <DialogTrigger render={<Button variant="outline" size='lg'>Create Issue</Button>} />
             <DialogContent className="min-w-[30%] w-fit flex flex-col gap-4">
                 <form className='flex flex-col gap-6'>
                     <DialogHeader>
-                        <DialogTitle>Edit Issue</DialogTitle>
+                        <DialogTitle>Create Issue</DialogTitle>
                         <DialogDescription>
-                            Make changes to the Issue here. Click save when you&apos;re
-                            done.
+                            Create new Issue here.
                         </DialogDescription>
                     </DialogHeader>
                     <FieldGroup >
                         <Field>
                             <Label htmlFor="title">Title</Label>
-                            <Input id="title" name="title" defaultValue={issue.title} />
+                            <Input id="title" name="title"  />
                         </Field>
                         <FieldSet>
                             <FieldGroup>
@@ -74,4 +70,4 @@ const EditIssueDialog = ({ issue }: EditIssueDialogProps) => {
     )
 }
 
-export default EditIssueDialog
+export default CreateIssueDialog

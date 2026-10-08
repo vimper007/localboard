@@ -1,13 +1,15 @@
 // https://ui.shadcn.com/docs/components/base/data-table
+// https://tanstack.com/table/latest/docs/guide/column-defs
 
 
 import { createColumnHelper } from "@tanstack/react-table"
 
 import { type DataTableFeatures } from "./issue-table-features"
 import type { Issue } from "@/types/issue"
-import { Button } from "@/components/ui/button"
 import { capitaliseStatus } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
+import EditIssueDialog from "../edit-issue-dialog"
+import DeleteIssueDialog from "../delete-issue-dialog"
 
 
 
@@ -34,13 +36,13 @@ export const columns = columnHelper.columns([
     }),
     columnHelper.display({
         id: 'actions',
-        header: 'Actions',
+        header: ()=><div>Actions</div>,
         cell: (info) => {
             const currentIssue = info.row.original
             return (
                 <div className="flex gap-2">
-                    <Button variant="secondary" onClick={() => console.log(currentIssue)}>Edit</Button>
-                    <Button variant="destructive" onClick={() => currentIssue}>Delete</Button>
+                    <EditIssueDialog issue={currentIssue} />
+                    <DeleteIssueDialog issue={currentIssue} />
                 </div>
             )
         }
