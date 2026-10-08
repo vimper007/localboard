@@ -21,5 +21,10 @@ https://ui.shadcn.com/docs/components/base/data-table
 https://tanstack.com/table/latest/docs/guide/data
 https://tanstack.com/table/latest/docs/guide/column-defs
 
+
+<!-- Fetch API -->
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#canceling_a_request
+
 <!-- Node -->
 https://www.youtube.com/watch?v=32M1al-Y6Ag&t=5618s

@@ -6,6 +6,7 @@ import { Input } from '../ui/input'
 import type { Issue } from '@/types/issue'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Textarea } from '../ui/textarea'
+import { useState } from 'react'
 
 type EditIssueDialogProps = {
     issue: Issue
@@ -18,6 +19,9 @@ const items = [
 ]
 
 const EditIssueDialog = ({ issue }: EditIssueDialogProps) => {
+    const [title, setTitle] = useState(issue.title)
+    const [description, setDescription] = useState(issue.description)
+    const [status, setStatus] = useState(issue.status)
     return (
         <Dialog>
             <DialogTrigger render={<Button variant="outline">Edit</Button>} />
@@ -33,7 +37,7 @@ const EditIssueDialog = ({ issue }: EditIssueDialogProps) => {
                     <FieldGroup >
                         <Field>
                             <Label htmlFor="title">Title</Label>
-                            <Input id="title" name="title" defaultValue={issue.title} />
+                            <Input id="title" name="title" defaultValue={title} onChange={(e) => setTitle(e.target.value)} />
                         </Field>
                         <FieldSet>
                             <FieldGroup>
@@ -45,18 +49,20 @@ const EditIssueDialog = ({ issue }: EditIssueDialogProps) => {
                                         id="checkout-7j9-optional-comments"
                                         placeholder="Add any additional comments"
                                         className="resize-none"
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
                                     />
                                 </Field>
                             </FieldGroup>
                         </FieldSet>
-                        <Select items={items}>
+                        <Select items={items} defaultValue={status} onValueChange={(value)=>setStatus(value)}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Status" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectGroup>
+                                <SelectGroup >
                                     {items.map((item) => (
-                                        <SelectItem key={item.value} value={item.value} className="w-full">
+                                        <SelectItem key={item.value} value={item.value} className="w-full" >
                                             {item.label}
                                         </SelectItem>
                                     ))}
