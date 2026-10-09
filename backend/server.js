@@ -155,7 +155,7 @@ function cors(req, res, next) {
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.methods === "OPTIONS") {
+  if (req.method === "OPTIONS") {
     res.writeHead(204);
     res.end();
     return;
@@ -255,29 +255,31 @@ function deleteIssueHandler(req, res) {
 console.log(PORT);
 const server = http.createServer((req, res) => {
   cors(req, res, () => {
-    const uuidRegex =
-      /^\/api\/v1\/issues\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    switch (true) {
-      case uuidRegex.test(req.url):
-        if (req.method === "GET") {
-          getIssueByIdHandler(req, res);
-        } else if (req.method === "PATCH") {
-          updateIssueHandler(req, res);
-        } else if (req.method === "DELETE") {
-          deleteIssueHandler(req, res);
-        }
-        break;
-      case req.url === "/api/v1/issues":
-        if (req.method === "GET") {
-          getIssuesHandler(req, res);
-        } else if (req.method === "POST") {
-          createIssueHandler(req, res);
-        }
-        break;
-      default:
-        res.statusCode = 404;
-        res.end("Not Found");
-    }
+    logger(req, res, () => {
+      const uuidRegex =
+        /^\/api\/v1\/issues\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      switch (true) {
+        case uuidRegex.test(req.url):
+          if (req.method === "GET") {
+            getIssueByIdHandler(req, res);
+          } else if (req.method === "PATCH") {
+            updateIssueHandler(req, res);
+          } else if (req.method === "DELETE") {
+            deleteIssueHandler(req, res);
+          }
+          break;
+        case req.url === "/api/v1/issues":
+          if (req.method === "GET") {
+            getIssuesHandler(req, res);
+          } else if (req.method === "POST") {
+            createIssueHandler(req, res);
+          }
+          break;
+        default:
+          res.statusCode = 404;
+          res.end("Not Found");
+      }
+    });
   });
 });
 

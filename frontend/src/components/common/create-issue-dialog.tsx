@@ -13,8 +13,10 @@ const items = [
     { label: "In Progress", value: "in-progress" },
     { label: "Done", value: "done" },
 ]
-
-const CreateIssueDialog = () => {
+type CreateIssueDialogProps = {
+    onSuccess?: () => void
+}
+const CreateIssueDialog = ({onSuccess}:CreateIssueDialogProps) => {
     return (
         <Dialog>
             <DialogTrigger render={<Button variant="outline" size='lg'>Create Issue</Button>} />
@@ -29,7 +31,7 @@ const CreateIssueDialog = () => {
                     <FieldGroup >
                         <Field>
                             <Label htmlFor="title">Title</Label>
-                            <Input id="title" name="title"  />
+                            <Input id="title" name="title" />
                         </Field>
                         <FieldSet>
                             <FieldGroup>

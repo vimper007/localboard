@@ -3,10 +3,11 @@ import { Button } from '../ui/button'
 import type { Issue } from '@/types/issue'
 
 type DeleteIssueDialog = {
-    issue: Issue
+    issue: Issue,
+    onSuccess: () => void
 }
 
-const DeleteIssueDialog = ({ issue }: DeleteIssueDialog) => {
+const DeleteIssueDialog = ({ issue, onSuccess }: DeleteIssueDialog) => {
     return (
         <Dialog>
             <form>

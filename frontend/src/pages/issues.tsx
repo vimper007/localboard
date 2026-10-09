@@ -1,5 +1,5 @@
 import CreateIssueDialog from "@/components/common/create-issue-dialog"
-import { columns } from "@/components/common/issue-table/columns"
+import { getColumns } from "@/components/common/issue-table/columns"
 import { IssueTable } from "@/components/common/issue-table/issue-table"
 import type { Issue } from "@/types/issue"
 import { useEffect, useState } from "react"
@@ -9,7 +9,11 @@ const Issues = () => {
   const [data, setData] = useState<Issue[]>([])
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [shouldRefetch, setShouldRefetch] = useState(false)
 
+  function onSuccess(){
+    setShouldRefetch(prev=>!prev)
+  }
   useEffect(() => {
     const controller = new AbortController()
     const fetchIssues = async () => {
@@ -35,11 +39,11 @@ const Issues = () => {
     return () => {
       controller.abort()
     }
-  }, [])
+  }, [shouldRefetch])
 
-  if (loading) {
-    return <div className="p-10 text-muted-foreground">Loading issues...</div>
-  }
+  // if (loading) {
+  //   return <div className="p-10 text-muted-foreground">Loading issues...</div>
+  // }
   if (error) {
     return <div className="p-10 text-destructive">{error}</div>
   }
@@ -47,9 +51,9 @@ const Issues = () => {
     <div className="flex flex-col gap-10 mt-10">
       <div className="flex w-full justify-between">
         <h1 className="font-bold text-4xl">Issues</h1>
-        <CreateIssueDialog />
+        <CreateIssueDialog onSuccess={onSuccess}/>
       </div>
-      <IssueTable data={data} columns={columns} />
+      <IssueTable data={data} columns={getColumns(onSuccess)} isLoading={loading}/>
     </div>
   )
 }

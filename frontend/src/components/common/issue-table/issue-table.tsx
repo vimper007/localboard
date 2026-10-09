@@ -1,3 +1,4 @@
+// https://ui.shadcn.com/docs/components/base/skeleton
 import { useTable, type ColumnDef, type RowData } from "@tanstack/react-table"
 
 import {
@@ -10,15 +11,19 @@ import {
 } from "@/components/ui/table"
 
 import { features, type DataTableFeatures } from "./issue-table-features"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<DataTableFeatures, TData>[]
   data: TData[]
+  onSuccess?: () => void,
+  isLoading: boolean
 }
 
 export function IssueTable<TData extends RowData>({
   columns,
   data,
+  isLoading
 }: DataTableProps<TData>) {
   const table = useTable({
     features,
@@ -45,26 +50,39 @@ export function IssueTable<TData extends RowData>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    <table.FlexRender cell={cell} />
-                  </TableCell>
-                ))}
+          {isLoading ?
+            Array.from({ length: 5 }).map((_, index) => (
+              <TableRow key={index}>
+                {
+                  columns.map((_, colIndex) => (
+                    <TableCell>
+                      <Skeleton key={colIndex} className="h-10 w-full" />
+                    </TableCell>
+                  ))
+                }
               </TableRow>
             ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
+            :
+            table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      <table.FlexRender cell={cell} />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
         </TableBody>
       </Table>
     </div>

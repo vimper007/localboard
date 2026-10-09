@@ -16,7 +16,7 @@ import DeleteIssueDialog from "../delete-issue-dialog"
 // Use `accessor` for data columns and `display` for columns without one.
 const columnHelper = createColumnHelper<DataTableFeatures, Issue>()
 
-export const columns = columnHelper.columns([
+export const getColumns = (onSuccess: () => void) => columnHelper.columns([
 
     columnHelper.accessor("title", {
         header: "Title",
@@ -36,13 +36,13 @@ export const columns = columnHelper.columns([
     }),
     columnHelper.display({
         id: 'actions',
-        header: ()=><div>Actions</div>,
+        header: () => <div>Actions</div>,
         cell: (info) => {
             const currentIssue = info.row.original
             return (
                 <div className="flex gap-2">
-                    <EditIssueDialog issue={currentIssue} />
-                    <DeleteIssueDialog issue={currentIssue} />
+                    <EditIssueDialog issue={currentIssue} onSuccess={onSuccess} />
+                    <DeleteIssueDialog issue={currentIssue} onSuccess={onSuccess} />
                 </div>
             )
         }
